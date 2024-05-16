@@ -101,10 +101,16 @@
     <!-- <div id="map-zoom-wrapper"> -->
     <div id="zoom-buttons">
       <button onclick="zoomIn()">
-        <img class="zoom-button zoom-in" src="https://harris-sliwoski.com/wp-content/uploads/zoom-in.png" />
+        <img
+          class="zoom-button zoom-in"
+          src="https://harris-sliwoski.com/wp-content/uploads/zoom-in.png"
+        />
       </button>
       <button onclick="zoomOut()">
-        <img class="zoom-button zoom-out" src="https://harris-sliwoski.com/wp-content/uploads/zoom-out.png" />
+        <img
+          class="zoom-button zoom-out"
+          src="https://harris-sliwoski.com/wp-content/uploads/zoom-out.png"
+        />
       </button>
     </div>
     <div id="map"></div>
@@ -153,7 +159,9 @@
       }
 
       // Load GeoJSON data
-      d3.json("countries.geojson").then((data) => {
+      d3.json(
+        "countries.geojson"
+      ).then((data) => {
         svg
           .selectAll("path")
           .data(data.features)
@@ -170,29 +178,36 @@
       });
 
       function handleCountryClick(event, d) {
+        $("#popup").css("display", "none");
 
         const countryName = d.properties.name;
-        $("#popup").css("display", "block");
+        
 
         var detailsValue = "";
         if (d.properties.legal) {
           detailsValue = d.properties.legal;
         }
-        $("#popup").html(
-          '<p class="popup-title">' +
-            d.properties.name +
-            '</p><p class="popup-details">' +
-            detailsValue +
-            "</p>"
-        );
-        $("#popup").css("left", event.pageX + 10 + "px");
-        $("#popup").css("top", event.pageY - 25 + "px");
-        $("#popup").css("display", "block");
+        if (d.properties.name) {
+          $("#popup").html(
+            '<p class="popup-title">' +
+              d.properties.name +
+              '</p><p class="popup-details">' +
+              detailsValue +
+              "</p>"
+          );
+          $("#popup").css("display", "block");
+          $("#popup").css("left", event.pageX + 10 + "px");
+          $("#popup").css("top", event.pageY - 25 + "px");
+          $("#popup").css("display", "block");
+        } else {
+          $("#popup").css("display", "none");
+        }
 
         // alert('Clicked on ' + countryName);
       }
 
       function handleMouseOver(event, d) {
+        $("#popup").css("display", "none");
         $("path.country").css("cursor", "pointer");
 
         // const countryName = d.properties.name;
@@ -213,10 +228,12 @@
 
       function zoomIn() {
         svg.transition().duration(500).call(zoom.scaleBy, 2);
+        $("#popup").css("display", "none");
       }
 
       function zoomOut() {
         svg.transition().duration(500).call(zoom.scaleBy, 0.5);
+        $("#popup").css("display", "none");
       }
 
       // Function to get color based on attribute
